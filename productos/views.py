@@ -63,3 +63,10 @@ def eliminar_producto(request, id):
         producto.delete()
         return HttpResponse(status=204)
     return JsonResponse({"error":"Metodo no permitido"}, status=405)
+
+def producto_nombre_categoria(request):
+    if request.method == "GET":
+        productos = Producto.objects.select_related("categoria").all()
+        datos = [{"nombre": p.nombre, "categoria": p.categoria.nombre} for p in productos]
+        return JsonResponse(datos, safe=False)
+    return JsonResponse({"error":"Metodo no permitido"}, status = 405)
